@@ -41,9 +41,3 @@ export interface DiscordUser {
     bot: boolean;
     avatar: string | null;
 }
-
-export interface BotUser {
-    id: string;
-    username: string;
-    discriminator: string;
-}

@@ -1,11 +1,11 @@
-import type { GatewayResponse, HelloPayload, ReadyPayload } from "./types";
+import type { DiscordUser, GatewayResponse, HelloPayload, ReadyPayload } from "./types";
 
 export default class Gateway {
     private ws!: WebSocket;
     private sequence: number | null = null;
     private heartbeatInterval!: Timer;
 
-    constructor(private token: string){}
+    constructor(private token: string, private onReady: (user: DiscordUser) => void){}
 
     connect() {
         this.ws = new WebSocket("wss://gateway.discord.gg/?v=10&encoding=json");
@@ -56,13 +56,18 @@ export default class Gateway {
             case 0: // DISPATCH
             // this is where we receive events !! IMPORTANT!!
             //console.log("Received DISPATCH event:", payload.t);
-                switch (payload.t) {
-                    case "READY":
-                    const username = (payload.d as ReadyPayload).user.username;
-                    console.log(`Logged in as ${username}`);
-                    break;
-                }
+                this.handleEvent(payload.t, payload.d);
             break;
+        }
+    }
+
+    private handleEvent(event: string | null, data?: unknown) {
+        switch(event) {
+            case "READY":
+                const ready = data as ReadyPayload;
+                console.log(`Logged in as ${ready.user.username}`);
+                this.onReady(ready.user);
+                break;
         }
     }
 
