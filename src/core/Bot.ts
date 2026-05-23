@@ -1,5 +1,5 @@
 import Gateway from "./Gateway";
-import type { DiscordUser, CommandHandler } from "./types";
+import type { DiscordUser, CommandHandler, Command } from "./types";
 
 export default class Bot {
     private token: string;
@@ -7,7 +7,7 @@ export default class Bot {
     private client_id: string;
     public user: DiscordUser | null = null;
     private gateway: Gateway | null = null;
-    private commands: Map<string, CommandHandler> = new Map();
+    private commands: Map<string, Command> = new Map();
 
     constructor(token: string, guild_id?: string, client_id?: string) {
         this.token = token;
@@ -15,8 +15,8 @@ export default class Bot {
         this.client_id = client_id || '';
     }
 
-    addCommand(name: string, handler: CommandHandler) {
-        this.commands.set(name, handler);
+    addCommand(name: string, description: string, handler: CommandHandler, guildId?: string) {
+        this.commands.set(name, { name, description, handler, guildId });
         return this;
     }
     

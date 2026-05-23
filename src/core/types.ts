@@ -41,3 +41,10 @@ export interface DiscordUser {
     bot: boolean;
     avatar: string | null;
 }
+
+export interface Command {
+  name: string;
+  description: string;
+  handler: CommandHandler;
+  guildId?: string;
+}
