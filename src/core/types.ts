@@ -1,5 +1,8 @@
 export interface Context {
     commandName: string;
+    user: GuildUser;
+    channel: Channel;
+    locale: string;
     sendMessage: (content: string) => Promise<void>;
 }
 
@@ -10,6 +13,21 @@ export interface GatewayResponse {
     s: number | null;
     op: number;
     d: unknown;
+}
+
+export interface Channel {
+    type: number;
+    topic: string | null;
+    rate_limit_per_user: number;
+    position: number;
+    permissions: string;
+    parent_id: string | null;
+    nsfw: boolean;
+    name: string;
+    last_message_id: string | null;
+    id: string;
+    guild_id: string;
+    flags: number
 }
 
 // this is the "d" property of the payload sent on op 10 (HELLO)
@@ -29,6 +47,35 @@ export interface ReadyPayload {
     }
 }
 
+export interface GuildUser {
+    username: string;
+    public_flags: number;
+    primary_guild: Clan | null;
+    id: string;
+    global_name: string;
+    display_name_styles: any[] | null;
+    discriminator: string;
+    collectibles : any[] | null;
+    clan: Clan | null;
+    avatar_decoration_data : any | null;
+    avatar: string | null;
+}
+
+export interface Member {
+    user: GuildUser;
+    roles: string[];
+    nick: string | null;
+    permissions: string;
+    joined_at: string;
+}
+
+export interface Clan {
+    tag: string;
+    identity_guild_id: string;
+    identity_enabled: boolean;
+    badge: string;
+}
+
 export interface DiscordUser {
     verified: boolean;
     username: string;
@@ -46,16 +93,24 @@ export interface DiscordUser {
 
 // 'd' property of payload on .t == "INTERACTION_CREATE"
 export interface InteractionPayload {
-  id: string;
-  token: string;
-  data: {
-    name: string;
-  };
+    id: string;
+    token: string;
+    type: number;
+    guild_id: string;
+    channel_id: string;
+    locale: string;
+    member: Member;
+    data: {
+        name: string;
+        type: number;
+        id: string;
+    };
+    channel: Channel;
 }
 
 export interface Command {
-  name: string;
-  description: string;
-  handler: CommandHandler;
-  guildId?: string;
+    name: string;
+    description: string;
+    handler: CommandHandler;
+    guildId?: string;
 }
