@@ -1,11 +1,18 @@
-import type { DiscordUser, GatewayResponse, HelloPayload, ReadyPayload } from "./types";
+import RestClient from "./RestClient";
+import type { Command, DiscordUser, GatewayResponse, HelloPayload, ReadyPayload, InteractionPayload } from "./types";
+import InteractionContext from "./InteractionContext";
 
 export default class Gateway {
     private ws!: WebSocket;
     private sequence: number | null = null;
     private heartbeatInterval!: Timer;
 
-    constructor(private token: string, private onReady: (user: DiscordUser) => void){}
+    constructor(
+        private token: string,
+        private onReady: (user: DiscordUser, clientId: string) => void,
+        private commands: Map<string, Command>,
+        private rest: RestClient
+    ) {}
 
     connect() {
         this.ws = new WebSocket("wss://gateway.discord.gg/?v=10&encoding=json");
@@ -61,12 +68,19 @@ export default class Gateway {
         }
     }
 
-    private handleEvent(event: string | null, data?: unknown) {
+    private async handleEvent(event: string | null, data?: unknown) {
         switch(event) {
             case "READY":
                 const ready = data as ReadyPayload;
                 console.log(`Logged in as ${ready.user.username}`);
-                this.onReady(ready.user);
+                this.onReady(ready.user, ready.application.id);
+                break;
+            case "INTERACTION_CREATE":
+                const interaction = data as InteractionPayload;
+                const command = this.commands.get(interaction.data.name);
+                if (!command) return;
+                const ctx = new InteractionContext(interaction, this.rest);
+                await command.handler(ctx);
                 break;
         }
     }

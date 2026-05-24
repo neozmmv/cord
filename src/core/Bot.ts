@@ -1,4 +1,5 @@
 import Gateway from "./Gateway";
+import RestClient from "./RestClient";
 import type { DiscordUser, CommandHandler, Command } from "./types";
 
 export default class Bot {
@@ -22,10 +23,16 @@ export default class Bot {
     
     async run(): Promise<void> {
         return new Promise((resolve) => {
-            this.gateway = new Gateway(this.token, (user) => {
+            const rest = new RestClient(this.token);
+            this.gateway = new Gateway(this.token, async (user, clientId) => {
             this.user = user;
-            resolve();
-        });
+            const commandsBody = [...this.commands.values()].map(cmd => ({
+                name: cmd.name,
+                description: cmd.description
+            }))
+            await rest.registerCommands(clientId, commandsBody);
+            resolve();  
+        }, this.commands, rest);
             this.gateway.connect();
         })
     }

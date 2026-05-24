@@ -23,6 +23,10 @@ export interface ReadyPayload {
     v: number;
     user_settings: {};
     user: DiscordUser;
+    application: {
+        id: string;
+        flags: number;
+    }
 }
 
 export interface DiscordUser {
