@@ -38,6 +38,8 @@ bot.on(Event.MESSAGE_CREATE, async (ctx) => {
     }
 })
 
+bot.on(Event.READY, (ctx) => {
+    console.log(ctx.user.username, "is ready!");
+})
+
 await bot.run();
-/* 
-console.log("bot info:", bot.user) */

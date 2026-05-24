@@ -24,17 +24,17 @@ export default class Gateway {
         this.ws = new WebSocket("wss://gateway.discord.gg/?v=10&encoding=json");
 
         this.ws.onopen = () => {
-            console.log("Connected to Discord Gateway");
+            //console.log("Connected to Discord Gateway");
         }
 
         this.ws.onmessage = (event) => {
-            console.log(event.data)
+            //console.log(event.data)
             const data = JSON.parse(event.data) as GatewayResponse;
             this.handlePayload(data);
         }
 
         this.ws.onclose = (event) => {
-            console.log(`WebSocket closed: ${event.code} - ${event.reason}`);
+            //console.log(`WebSocket closed: ${event.code} - ${event.reason}`);
             clearInterval(this.heartbeatInterval);
         }
 
@@ -63,7 +63,7 @@ export default class Gateway {
 
             case 11: // HEARTBEAT_ACK
             // check if the bot is alive, but we'll just log it for now
-            console.log("Received HEARTBEAT_ACK");
+            //console.log("Received HEARTBEAT_ACK");
             break;
 
             case 0: // DISPATCH

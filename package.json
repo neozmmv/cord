@@ -1,18 +1,23 @@
 {
-  "name": "cord",
-  "module": "main.ts",
+  "name": "@neozmmv/cord",
+  "version": "0.1.0",
+  "description": "A minimal Discord bot library",
+  "module": "src/main.ts",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
   "type": "module",
-  "private": true,
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
+  "private": false,
+  "files": ["dist"],
   "scripts": {
-    "dev": "bun --watch src/examples/BotRun.ts"
+    "dev": "bun --watch src/examples/BotRun.ts",
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5"
   },
   "dependencies": {
     "discord-api-types": "^0.38.47"
-  }
+  },
+  "license": "MIT"
 }
