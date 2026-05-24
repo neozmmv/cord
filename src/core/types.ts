@@ -1,4 +1,7 @@
-export interface Context {
+// KEPT HERE FOR REFERENCE
+// NOW SPLIT INTO "types/internal.ts" AND "types/public.ts" TO BETTER SEPARATE INTERNAL VS PUBLIC TYPES
+
+/* export interface Context {
     readonly commandName: string;
     readonly user: GuildUser;
     readonly channel: Channel;
@@ -113,4 +116,4 @@ export interface Command {
     readonly description: string;
     readonly handler: CommandHandler;
     readonly guildId?: string;
-}
+} */
