@@ -1,6 +1,6 @@
 import RestClient from "./RestClient";
 import type { DiscordUser, GatewayResponse, HelloPayload, ReadyPayload, InteractionPayload } from "./types/internal";
-import type { Command } from "./types/public";
+import type { Command, Event, EventPayloadMap } from "./types/public";
 import InteractionContext from "./InteractionContext";
 
 export default class Gateway {
@@ -12,7 +12,9 @@ export default class Gateway {
         private token: string,
         private onReady: (user: DiscordUser, clientId: string) => void,
         private commands: Map<string, Command>,
-        private rest: RestClient
+        private rest: RestClient,
+        private dispatch: <E extends Event>(event: E, payload: EventPayloadMap[E]) => void,
+        private intents: number
     ) {}
 
     connect() {
@@ -70,20 +72,21 @@ export default class Gateway {
     }
 
     private async handleEvent(event: string | null, data?: unknown) {
+        if (!event) return;
         switch(event) {
             case "READY":
                 const ready = data as ReadyPayload;
-                console.log(`Logged in as ${ready.user.username}`);
                 this.onReady(ready.user, ready.application.id);
                 break;
             case "INTERACTION_CREATE":
                 const interaction = data as InteractionPayload;
                 const command = this.commands.get(interaction.data.name);
-                if (!command) return;
+                if (!command) break;
                 const ctx = new InteractionContext(interaction, this.rest);
                 await command.handler(ctx);
                 break;
-        }
+            }
+        this.dispatch(event as Event, data as EventPayloadMap[Event]);
     }
 
     private sendIdentify() {
@@ -91,7 +94,7 @@ export default class Gateway {
             "op": 2,
             "d": {
                 "token": this.token,
-                "intents": 513, // we'll do this later, i dont know this yet
+                "intents": this.intents, // we'll do this later, i dont know this yet
                 "properties": {
                     "os": "linux",
                     "browser": "cord",

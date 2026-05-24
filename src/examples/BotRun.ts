@@ -1,6 +1,7 @@
 import Bot from "../core/Bot";
+import { Event } from "../core/types/public";
 
-const bot = new Bot(process.env.TOKEN!)
+const bot = new Bot(process.env.TOKEN!, Bot.DEFAULT_INTENTS)
 
 bot.addCommand("ping", "Replies with Pong!", async (ctx) => {
     ctx.commandName
@@ -21,8 +22,12 @@ bot.addCommand("ping", "Replies with Pong!", async (ctx) => {
 }, process.env.SERVER_ID)
 
 
-
+bot.on(Event.MESSAGE_CREATE, async (ctx) => {
+    if (ctx.content === "!hello") {
+        console.log("Received !hello command, replying with Hello World!");
+    }
+})
 
 await bot.run();
-
-console.log("bot info:", bot.user)
+/* 
+console.log("bot info:", bot.user) */
