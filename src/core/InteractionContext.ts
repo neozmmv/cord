@@ -1,4 +1,5 @@
-import type { Channel, Context, GuildUser, InteractionPayload } from "./types";
+import type { InteractionPayload } from "./types/internal";
+import type { Channel, Context, GuildUser } from "./types/public";
 import RestClient from "./RestClient";
 
 export default class InteractionContext implements Context {

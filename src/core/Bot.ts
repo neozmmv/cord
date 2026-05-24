@@ -1,6 +1,7 @@
 import Gateway from "./Gateway";
 import RestClient from "./RestClient";
-import type { DiscordUser, CommandHandler, Command } from "./types";
+import type { CommandHandler, Command } from "./types/public";
+import type { DiscordUser } from "./types/internal";
 
 export default class Bot {
     private token: string;

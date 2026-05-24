@@ -1,5 +1,6 @@
 import RestClient from "./RestClient";
-import type { Command, DiscordUser, GatewayResponse, HelloPayload, ReadyPayload, InteractionPayload } from "./types";
+import type { DiscordUser, GatewayResponse, HelloPayload, ReadyPayload, InteractionPayload } from "./types/internal";
+import type { Command } from "./types/public";
 import InteractionContext from "./InteractionContext";
 
 export default class Gateway {
