@@ -1,4 +1,5 @@
 import type { GatewayChannelUpdateDispatchData, GatewayChannelCreateDispatchData, GatewayMessageCreateDispatch, GatewayReadyDispatch, GatewayReadyDispatchData, GatewayResumedDispatch, GatewayChannelDeleteDispatchData, GatewayChannelPinsUpdateDispatchData, GatewayGuildCreateDispatchData, GatewayGuildUpdateDispatchData, GatewayGuildDeleteDispatchData, GatewayGuildBanAddDispatchData, GatewayGuildBanRemoveDispatchData, GatewayGuildEmojisUpdateDispatchData, GatewayGuildMemberAddDispatchData, GatewayGuildMemberUpdateDispatchData, GatewayGuildMemberRemoveDispatchData, GatewayMessageCreateDispatchData, GatewayMessageUpdateDispatchData, GatewayMessageDeleteDispatchData, GatewayMessageDeleteBulkDispatchData, GatewayMessageReactionAddDispatchData, GatewayMessageReactionRemoveDispatchData, GatewayMessageReactionRemoveAllDispatchData, GatewayPresenceUpdateDispatchData, GatewayTypingStartDispatchData, GatewayVoiceStateUpdateDispatchData, GatewayVoiceServerUpdateDispatchData, GatewayInteractionCreateDispatchData, GatewayThreadCreateDispatchData, GatewayThreadUpdateDispatchData, GatewayThreadDeleteDispatchData, GatewayThreadMemberUpdateDispatchData, GatewayGuildStickersUpdateDispatchData } from "discord-api-types/v10"
+import type MessageContext from "../MessageContext";
 
 export interface Context {
     readonly commandName: string;
@@ -117,7 +118,7 @@ export interface EventPayloadMap {
     [Event.GUILD_MEMBER_UPDATE]: GatewayGuildMemberUpdateDispatchData;
     [Event.GUILD_MEMBER_REMOVE]: GatewayGuildMemberRemoveDispatchData;
 
-    [Event.MESSAGE_CREATE]: GatewayMessageCreateDispatchData;
+    [Event.MESSAGE_CREATE]: MessageContext;
     [Event.MESSAGE_UPDATE]: GatewayMessageUpdateDispatchData;
     [Event.MESSAGE_DELETE]: GatewayMessageDeleteDispatchData;
     [Event.MESSAGE_DELETE_BULK]: GatewayMessageDeleteBulkDispatchData;

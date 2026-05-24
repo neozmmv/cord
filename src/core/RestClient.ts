@@ -45,6 +45,10 @@ export default class RestClient {
         });
     }
 
+    async sendMessage(channelId: string, content: string): Promise<void> {
+        await this.post(`/channels/${channelId}/messages`, { content });
+    }
+
     async registerCommands(clientId: string, commands: unknown[], guildId?: string): Promise<void> {
         const endpoint = guildId 
         ? `/applications/${clientId}/guilds/${guildId}/commands` 

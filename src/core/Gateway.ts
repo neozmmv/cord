@@ -1,7 +1,10 @@
 import RestClient from "./RestClient";
 import type { DiscordUser, GatewayResponse, HelloPayload, ReadyPayload, InteractionPayload } from "./types/internal";
-import type { Command, Event, EventPayloadMap } from "./types/public";
+import type { Command, EventPayloadMap } from "./types/public";
+import { Event } from "./types/public";
 import InteractionContext from "./InteractionContext";
+import MessageContext from "./MessageContext";
+import type { GatewayMessageCreateDispatchData } from "discord-api-types/v10";
 
 export default class Gateway {
     private ws!: WebSocket;
@@ -85,6 +88,10 @@ export default class Gateway {
                 const ctx = new InteractionContext(interaction, this.rest);
                 await command.handler(ctx);
                 break;
+            case "MESSAGE_CREATE":
+                const messageCtx = new MessageContext(data as GatewayMessageCreateDispatchData, this.rest);
+                this.dispatch(Event.MESSAGE_CREATE, messageCtx);
+                return;
             }
         this.dispatch(event as Event, data as EventPayloadMap[Event]);
     }

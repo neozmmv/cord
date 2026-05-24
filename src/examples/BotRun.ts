@@ -1,4 +1,5 @@
 import Bot from "../core/Bot";
+import InteractionContext from "../core/InteractionContext";
 import { Event } from "../core/types/public";
 
 const bot = new Bot(process.env.TOKEN!, Bot.DEFAULT_INTENTS)
@@ -24,7 +25,7 @@ bot.addCommand("ping", "Replies with Pong!", async (ctx) => {
 
 bot.on(Event.MESSAGE_CREATE, async (ctx) => {
     if (ctx.content === "!hello") {
-        console.log("Received !hello command, replying with Hello World!");
+        await ctx.sendMessage("Hello there!");
     }
 })
 
