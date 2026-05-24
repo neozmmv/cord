@@ -1,3 +1,5 @@
+import type { MessageOptions } from "./types/public";
+
 export default class RestClient {
     private baseURL = "https://discord.com/api/v10";
 
@@ -51,11 +53,12 @@ export default class RestClient {
         return response.json();
     }
 
-    async replyInteraction(id: string, token: string, content: string): Promise<void> {
+    async replyInteraction(id: string, token: string, content: string, options?: MessageOptions): Promise<void> {
         await this.post(`/interactions/${id}/${token}/callback`, {
             type: 4, // CHANNEL_MESSAGE_WITH_SOURCE
             data: {
-                content
+                content,
+                flags: options?.ephemeral ? 64 : 0
             }
         });
     }

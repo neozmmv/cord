@@ -6,7 +6,11 @@ export interface Context {
     readonly user: GuildUser;
     readonly channel: Channel;
     readonly locale: string;
-    sendMessage: (content: string) => Promise<void>;
+    sendMessage: (content: string, options?: MessageOptions) => Promise<void>;
+}
+
+export interface MessageOptions {
+    ephemeral?: boolean;
 }
 
 export type CommandHandler = (ctx: Context) => Promise<void>;

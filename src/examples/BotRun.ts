@@ -14,7 +14,7 @@ bot.addCommand("ping", "Replies with Pong!", async (ctx) => {
 }, process.env.SERVER_ID)
 .addCommand("whoami", "Replies with your username", async (ctx) => {
     const senderUsername = ctx.user.global_name;
-    await ctx.sendMessage(`You are ${senderUsername}`);
+    await ctx.sendMessage(`You are ${senderUsername}`, { ephemeral: true });
 }, process.env.SERVER_ID)
 .addCommand("serverinfo", "Replies with server info", async (ctx) => {
     const server = ctx.channel.id;
