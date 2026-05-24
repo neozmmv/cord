@@ -1,5 +1,3 @@
-
-
 export interface Context {
     commandName: string;
     reply: (content: string) => Promise<void>;
@@ -40,6 +38,15 @@ export interface DiscordUser {
     clan: string | null;
     bot: boolean;
     avatar: string | null;
+}
+
+// 'd' property of payload on .t == "INTERACTION_CREATE"
+export interface InteractionPayload {
+  id: string;
+  token: string;
+  data: {
+    name: string;
+  };
 }
 
 export interface Command {
