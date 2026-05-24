@@ -20,6 +20,21 @@ export default class RestClient {
         return response.json();
     }
 
+        async patch(endpoint: string, body: unknown): Promise<unknown> {
+        const response = await fetch(`${this.baseURL}${endpoint}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bot ${this.token}`
+            },
+            body: JSON.stringify(body)
+        });
+        if (!response.ok) {
+            throw new Error(`Discord HTTP error! status: ${response.status} - ${response.statusText}`);
+        }
+        return response.json();
+    }
+
     async post(endpoint: string, body: unknown): Promise<unknown> {
         const response = await fetch(`${this.baseURL}${endpoint}`, {
             method: "POST",
@@ -45,8 +60,17 @@ export default class RestClient {
         });
     }
 
-    async sendMessage(channelId: string, content: string): Promise<void> {
-        await this.post(`/channels/${channelId}/messages`, { content });
+    async sendMessage(channelId: string, content: string): Promise<string> {
+        const response = await this.post(`/channels/${channelId}/messages`, { content });
+        return (response as any).id;
+    }
+
+    async editMessage(channelId: string, messageId: string, content: string): Promise<void> {
+        await this.patch(`/channels/${channelId}/messages/${messageId}`, { content });
+    }
+
+    async editInteractionReply(token: string, clientId: string, content: string): Promise<void> {
+        await this.patch(`/webhooks/${clientId}/${token}/messages/@original`, { content });
     }
 
     async registerCommands(clientId: string, commands: unknown[], guildId?: string): Promise<void> {

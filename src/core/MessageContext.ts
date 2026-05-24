@@ -17,7 +17,11 @@ export default class MessageContext {
         this.author = payload.author;
     }
 
-    async sendMessage(content: string): Promise<void> {
-        await this.rest.sendMessage(this.channelId, content);
+    async sendMessage(content: string): Promise<string> {
+        return await this.rest.sendMessage(this.channelId, content);
+    }
+
+    async editMessage(messageId: string, content: string) {
+        await this.rest.editMessage(this.channelId, messageId, content);
     }
 }

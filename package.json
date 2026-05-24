@@ -10,7 +10,7 @@
     "typescript": "^5"
   },
   "scripts": {
-    "dev": "bun --watch src/main.ts"
+    "dev": "bun --watch src/examples/BotRun.ts"
   },
   "dependencies": {
     "discord-api-types": "^0.38.47"

@@ -25,7 +25,16 @@ bot.addCommand("ping", "Replies with Pong!", async (ctx) => {
 
 bot.on(Event.MESSAGE_CREATE, async (ctx) => {
     if (ctx.content === "!hello") {
-        await ctx.sendMessage("Hello there!");
+        await ctx.sendMessage(`Hello, ${ctx.author.global_name}! This is a response to your message: "${ctx.content}" in channel ${ctx.channelId}.`);
+    }
+})
+
+bot.on(Event.MESSAGE_CREATE, async (ctx) => {
+    if (ctx.content === "!delay") {
+        const now = new Date();
+        const id = await ctx.sendMessage(`Pong!`);
+        const later = new Date();
+        await ctx.editMessage(id, `Pong! (Response time: ${later.getTime() - now.getTime()}ms)`);
     }
 })
 

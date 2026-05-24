@@ -23,4 +23,8 @@ export default class InteractionContext implements Context {
     async sendMessage(content: string): Promise<void> {
         await this.rest.replyInteraction(this.interaction.id, this.interaction.token, content);
     }
+
+    async editMessage(content: string): Promise<void> {
+        await this.rest.editInteractionReply(this.interaction.token, this.interaction.application_id, content);
+    }
 }
