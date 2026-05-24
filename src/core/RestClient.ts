@@ -14,7 +14,8 @@ export default class RestClient {
         });
 
         if (!response.ok) {
-            throw new Error(`Discord HTTP error! status: ${response.status} - ${response.statusText}`);
+            const errorBody = await response.text();
+            throw new Error(`Discord HTTP error! status: ${response.status} - ${response.statusText} - ${errorBody}`);
         }
         return response.json();
     }

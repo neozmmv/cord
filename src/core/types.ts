@@ -1,6 +1,6 @@
 export interface Context {
     commandName: string;
-    reply: (content: string) => Promise<void>;
+    sendMessage: (content: string) => Promise<void>;
 }
 
 export type CommandHandler = (ctx: Context) => Promise<void>;

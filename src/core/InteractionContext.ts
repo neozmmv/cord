@@ -11,7 +11,7 @@ export default class InteractionContext implements Context {
     this.commandName = interaction.data.name;
   }
 
-    async reply(content: string): Promise<void> {
+    async sendMessage(content: string): Promise<void> {
         await this.rest.replyInteraction(this.interaction.id, this.interaction.token, content);
     }
 }

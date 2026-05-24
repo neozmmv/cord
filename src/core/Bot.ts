@@ -17,6 +17,12 @@ export default class Bot {
     }
 
     addCommand(name: string, description: string, handler: CommandHandler, guildId?: string) {
+        for(let i = 0; i < name.length; i++) {
+            let letter = name.charAt(i);
+            if(!/[a-z0-9]/.test(letter)) {
+                throw new Error("Command names must be lowercase and can only contain letters and numbers");
+            }
+        }
         this.commands.set(name, { name, description, handler, guildId });
         return this;
     }
@@ -26,11 +32,29 @@ export default class Bot {
             const rest = new RestClient(this.token);
             this.gateway = new Gateway(this.token, async (user, clientId) => {
             this.user = user;
-            const commandsBody = [...this.commands.values()].map(cmd => ({
+            const globalCommands = [...this.commands.values().filter(cmd => !cmd.guildId)]
+            const guildCommands = [...this.commands.values().filter(cmd => cmd.guildId)]
+
+            if (globalCommands.length > 0) {
+                await rest.registerCommands(clientId, globalCommands.map(cmd => ({
                 name: cmd.name,
                 description: cmd.description
-            }))
-            await rest.registerCommands(clientId, commandsBody);
+            })));
+           }
+
+            const byGuild = new Map<string, typeof guildCommands>();
+            for (const cmd of guildCommands) {
+                const existing = byGuild.get(cmd.guildId!) ?? [];
+                byGuild.set(cmd.guildId!, [...existing, cmd]);
+            }
+
+            for (const [guildId, cmds] of byGuild) {
+                await rest.registerCommands(clientId, cmds.map(cmd => ({
+                    name: cmd.name,
+                    description: cmd.description
+                })), guildId);
+            }
+
             resolve();  
         }, this.commands, rest);
             this.gateway.connect();
